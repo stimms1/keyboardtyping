@@ -2,20 +2,35 @@ from pynput.keyboard import Listener, Key
 import time 
 userText = "" 
 quote = "The quick brown fox jumps over the lazy dog."
+startTime = None
+endTime = None
 i = 0
         
 def compare(key):
     global i
     global quote 
     global userText
+    global startTime
+    global endTime
+
+    if startTime is None and i == 0:
+        startTime = time.time()
 
     try: 
         char = key.char
 
         if i >= len(quote) - 1 :
+            endTime = time.time()
+            duration = endTime - startTime
+
+            wordCount = len(quote) / 5
+            wpm = (wordCount) / (duration / 60)
+
             userText += char
             print(f"\nYour input: {userText}")
-            print("Quote completed!") # add the time here once time is done.
+            print("\nQuote completed!")
+            print(f"Time taken: {duration:.2f} seconds")
+            print(f"Your WPM: {wpm:.2f}")
             return False
         
         if char == quote[i]:
